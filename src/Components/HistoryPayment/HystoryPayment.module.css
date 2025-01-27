@@ -1,0 +1,67 @@
+.hystoryPayment{
+    
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 680px;
+    overflow-y: scroll;
+    background-color: rgb(203, 232, 243);
+}
+.information{
+    display: flex;
+    flex-direction:row;
+    align-content: center;
+    align-items: flex-start;
+    gap: 50px;
+    padding: 10px;
+}
+.addNamesCost{
+    border: 1px solid black;
+    border-radius: 50%;
+    width: 20px;
+}
+.hystory{
+    display: flex;
+    gap: 50px;
+    padding: 10px;
+}
+.namesCost{
+    margin-right: 30px;
+    padding: 5px;
+}
+.costNum{
+    margin-left: 30px;
+    padding: 5px;
+}
+
+.btnAdd {
+    
+    padding: 5px 10px;
+    border: 1px solid black;
+    border-radius: 30px;
+    background-color: rgb(7, 224, 240);
+}
+.btnAdd:active {
+    background-color: rgb(3, 135, 145);
+    box-shadow: -5px -5px 5px -5px rgb(3, 135, 145) inset;
+}
+
+.buttonSub {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 100%;
+    margin: 0 auto;
+    background-color: rgb(7, 224, 240);
+}
+
+.buttonSub:active {
+    background-color: rgb(3, 135, 145);
+    box-shadow: -5px -5px 5px -5px rgb(3, 135, 145) inset;
+}
+.FormCategory{
+    font-size: 16px;
+  }
+.inputPrice{
+    margin-left:5px ;
+    border: 1px solid black; 
+    border-radius: 5px;
+}

@@ -1,0 +1,110 @@
+.modal {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+  z-index: 2;
+}
+
+.modal2 {
+  /* height: 101vh;
+  width: 100vw; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.modal2.active {
+  opacity: 1;
+  pointer-events: all;
+  z-index: 2;
+}
+
+.modalWindow {
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid black;
+  background-color: rgb(164, 229, 255);
+  width: 50vh;
+  transform: scale(0.5);
+  transition: 0.4s all;
+}
+
+.modalWindow2 {
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid black;
+  background-color: rgb(164, 229, 255);
+  width: 50vh;
+  transform: scale(0.5);
+  transition: 0.4s all;
+}
+
+.modalWindow.active {
+  transform: scale(1);
+  display: flex;
+  flex-direction: column;
+}
+
+.modalWindow2.active {
+  transform: scale(1.1);
+  display: flex;
+  flex-direction: column;
+}
+.RegModalFlex {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-wrap: wrap;
+  align-content: center;
+}
+.btnAuth {
+  margin-bottom: 5px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: rgb(203, 232, 243);
+}
+
+@media (max-width: 430px) {
+  .modal {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.5s;
+  }
+
+  .modalWindow {
+    padding: 20px;
+    border-radius: 12px;
+    background-color: white;
+    width: 50vh;
+    transform: scale(0.5);
+    transition: 0.4s all;
+  }
+}

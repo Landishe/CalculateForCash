@@ -1,0 +1,28 @@
+.Cash{
+    margin-top: 15px;
+    border: 1px solid black;;
+    border-radius: 10px;
+    background-color: white;
+    height: auto;
+    background-color: rgb(203, 232, 243);
+    padding: 10px;
+}
+.infoCash{
+    padding: 10px;
+    font-size: 30px;
+}
+.inputsCash{
+    padding: 10px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+.dynamics{
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}

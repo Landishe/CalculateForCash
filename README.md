@@ -1,50 +1,43 @@
-# React + TypeScript + Vite
+# Калькулятор Трат Денег
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Проект представляет собой веб-приложение для учета личных финансов. С его помощью пользователи могут отслеживать свои расходы, анализировать их и визуализировать данные в виде графиков.
 
-Currently, two official plugins are available:
+## Основные функции
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Учет расходов**: Добавление, редактирование и удаление трат.
+- **Мультипользовательский режим**: Возможность работы с разными пользователями.
+- **Хранение данных**: Все данные сохраняются на сервере.
+- **Визуализация**: В конце будет добавлен график для анализа трат.
 
-## Expanding the ESLint configuration
+## Технологии
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Frontend**: React + TypeScript
+- **Backend**: Node.js + Express
+-
+- **Графики**: Chart.js
 
-- Configure the top-level `parserOptions` property like this:
+## Установка и запуск
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Требования
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- Node.js (версия 16 или выше)
+- npm или yarn
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Инструкция по установке
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+1. Клонируйте репозиторий:
+
+
+    git clone https://github.com/ваш-username/CalculateForCash.git
+
+2. Перейдите в папку проекта:
+   cd калькулятор-трат
+
+3. Установите зависимости:
+   npm install
+
+Запустите сервер разработки:
+npm start
+
+Откройте браузер и перейдите по адресу:
+http://localhost:3000

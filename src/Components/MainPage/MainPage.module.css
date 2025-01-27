@@ -1,0 +1,43 @@
+.mainPage {
+  width: 100%;
+  height: auto;
+  border: 2px solid black;
+  border-radius: 10px;
+  display: grid;
+  grid-template-rows: 600px 217px;
+  grid-template-columns: 500px 650px;
+  justify-content: left;
+  align-content: center;
+  gap: 24px;
+  background-color: rgb(248, 248, 248);
+  padding: 15px;
+}
+.hystoryCash {
+  padding-top: 10px;
+}
+.forCashAndHystory {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+.forGrafics {
+}
+
+.forReg {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.buttonSub {
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 80%;
+  margin: 0 auto;
+  background-color: rgb(7, 224, 240);
+}
+
+.buttonSub:active {
+  background-color: rgb(3, 135, 145);
+  box-shadow: -5px -5px 5px -5px rgb(3, 135, 145) inset;
+}

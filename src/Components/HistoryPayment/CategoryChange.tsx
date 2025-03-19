@@ -1,23 +1,52 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import './historyModal.css'
 import styles from './HystoryPayment.module.css'
-import { DataPropsAndActiveWindow } from '../../types/types'
+import {
+  DataPropsAndActiveWindow,
+  DatacostAndCategoryForUser,
+} from '../../types/types'
+import { sendCostAndCatgory } from '../../api/postSent'
+import { CostAndCategory } from '../../Context/MyContext'
+import { UserContext } from '../../Context/MyContext'
 
-
-
-export function CategoryChange({ active, setActive, priceAdd, categories }: DataPropsAndActiveWindow) {
-  
+export function CategoryChange({
+  active,
+  setActive,
+  priceAdd,
+  categories,
+}: DataPropsAndActiveWindow) {
+  const { user, setUser } = useContext(UserContext)
   const [costAdd, setCostAdd] = useState<number>(0)
+  const { costAndCategory } = useContext(CostAndCategory)
+  const [error, setError] = useState<string>('ошбика')
 
+  const combindedDataCattegoryAndUser: DatacostAndCategoryForUser = {
+    ...user,
+    expenses: { ...costAndCategory },
+  }
 
   function handleInputChange(e) {
     setCostAdd(e.target.value)
-    
   }
-//  получаем в колбек данные о нажатии на кнопку
-  const categoryClick = (category: string[]) => () => {
-    priceAdd(costAdd, category)
+  // передаем данные на сервер
+  const handleSendData = async () => {
+    console.log('тут работает')
+    try {
+      const result = await sendCostAndCatgory(combindedDataCattegoryAndUser)
+      console.log('Success:', result)
+    } catch {
+      console.error('Error:', error)
+    }
   }
+  //  получаем в колбек данные о нажатии на кнопку
+  const categoryClick = (category: string) => () => {
+    if (typeof costAdd === 'string') {
+      const numberCostAdd = Number(costAdd)
+      priceAdd(numberCostAdd, category)
+    }
+    handleSendData()
+  }
+
 
   return (
     <>
@@ -40,7 +69,7 @@ export function CategoryChange({ active, setActive, priceAdd, categories }: Data
             <label>Введите сумму</label>
             <input
               className={styles.inputPrice}
-              type='text'
+              type='number'
               value={costAdd}
               onChange={handleInputChange}
             />
@@ -55,7 +84,7 @@ export function CategoryChange({ active, setActive, priceAdd, categories }: Data
                   {category}
                 </button>
               ))}
-              <button className={styles.buttonSub}>
+              <button className={styles.buttonSub} onClick={handleSendData}>
                 {'Добавить категорию'}
               </button>
             </div>

@@ -5,7 +5,7 @@ import styles from './HystoryPayment.module.css'
 import { DataProps } from '../../types/types'
 
 
-export function CategoryWidow({priceAdd, categories}: DataProps) {
+export function CategoryWindow({priceAdd, categories}: DataProps) {
   const [modalActive, setModalActive] = useState(false)
 
   return (

@@ -1,25 +1,15 @@
 import { DatacostAndCategoryForUser } from '../types/types'
 
 export async function sendCostAndCatgory(data: DatacostAndCategoryForUser) {
-  
   try {
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      throw new Error("Токен авторизации не найден");
-    }
-
-
     const response = await fetch(
-      `http://185.255.133.251:8051/api/balance/addNewItem`,
+      `http://185.255.133.251:8051/api/balance/getBalance`,
       {
-        method: 'POST',
+        method: 'GET',
+        credentials: 'include',
         headers: {
           'Content-type': 'application/json',
-          "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify(data),
-        credentials: 'include',
       }
     )
 
@@ -33,8 +23,3 @@ export async function sendCostAndCatgory(data: DatacostAndCategoryForUser) {
     throw error
   }
 }
-
-
-
-  
-  

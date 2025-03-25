@@ -1,20 +1,23 @@
 import './modal.css'
 import styles from './MainPage.module.css'
-import Cookies from 'js-cookie';
+import Cookies from 'js-cookie'
 import { RegButton } from './RegButton.js'
 import { useState, useContext } from 'react'
 import { FormData } from '../../types/types'
 import { UserContext } from '../../Context/MyContext.js'
 import { ActiveWindow } from '../../types/types'
 import { ChangeEvent } from 'react'
-
+import axios from 'axios'
 
 export function ModalWindow({ active, setActive }: ActiveWindow) {
   const { user, setUser } = useContext(UserContext)
-  const [formData, setFormData] = useState<FormData>({email: '',password: ''})
+  const [formData, setFormData] = useState<FormData>({
+    email: '',
+    password: '',
+  })
   const [message, setMessage] = useState<string>('')
   const [error, setError] = useState<null>(null)
-  // 
+  //
   const [registrationResponse, setRegistrationResponse] = useState(null)
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>, name: string) {
@@ -27,10 +30,10 @@ export function ModalWindow({ active, setActive }: ActiveWindow) {
         'http://185.255.133.251:8051/api/users/login',
         {
           method: 'POST',
-          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: 'include',
           body: JSON.stringify({
             email: formData.email,
             password: formData.password,
@@ -41,19 +44,37 @@ export function ModalWindow({ active, setActive }: ActiveWindow) {
         const errorData = await response.json()
         throw new Error(errorData.message || 'ошибка авторизации')
       }
-      
+    
+      // await axios
+      //   .post(
+      //     'http://185.255.133.251:8051/api/users/login',
+      //     {
+      //       email: formData.email,
+      //       password: formData.password,
+      //     },
+      //     {
+      //       withCredentials: true,
+      //     }
+      //   )
+      //   .then((res) => {
+      //     console.log(res)
+      //   })
+
+      console.log(response)
+      console.log(response?.cookies)
+      console.log(response?.token)
       const data = await response.json()
-     
+
       console.log('Результат авторизации:', data)
 
-      if(data.token){
-        Cookies.set('auth_token', data.token,{
-          secure:true,
-          sameSite:'Strict',
-          expires: 1
+      if (data.token) {
+        console.log('Токен сохранен в куки:', Cookies.get('auth_token'))
+        Cookies.set('auth_token', data.token, {
+          secure: false,
+          sameSite: 'Lax',
+          expires: 1,
         })
       }
-
       setUser(data)
       setMessage('Успешная авторизация!')
     } catch (error) {

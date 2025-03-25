@@ -20,11 +20,9 @@ export function CategoryChange({
   const { costAndCategory } = useContext(CostAndCategory)
   const [error, setError] = useState<string>('ошбика')
 
-  const combindedDataCattegoryAndUser: DatacostAndCategoryForUser = {
-    ...user,
-    expenses: { ...costAndCategory },
-  }
-
+  
+  console.log(costAndCategory)
+  
   function handleInputChange(e) {
     setCostAdd(e.target.value)
   }
@@ -32,7 +30,7 @@ export function CategoryChange({
   const handleSendData = async () => {
     console.log('тут работает')
     try {
-      const result = await sendCostAndCatgory(combindedDataCattegoryAndUser)
+      const result = await sendCostAndCatgory()
       console.log('Success:', result)
     } catch {
       console.error('Error:', error)

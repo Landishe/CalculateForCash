@@ -9,6 +9,7 @@ export function HistoryPaymant() {
     { id: 0, category: '', cost: 0 },
   ])
 
+  
   // колбек на получение категории и стоимости
   const priceAdd = (cost: number, category: string) => {
     // сохранение состояние категории и стоимости

@@ -1,48 +1,110 @@
-import { useContext, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import './historyModal.css'
 import styles from './HystoryPayment.module.css'
 import {
   DataPropsAndActiveWindow,
-  DatacostAndCategoryForUser,
+  Categories,
+  dataExpenses,
+  getExpensesDate,
 } from '../../types/types'
-import { sendCostAndCatgory } from '../../api/postSent'
-import { CostAndCategory } from '../../Context/MyContext'
-import { UserContext } from '../../Context/MyContext'
+
+import { SentDateCategory } from '../../api/SentDateCategory'
+import { GetMonthyTransaction } from '../../api/GetMonthyTransaction'
+import { useUserContext } from '../../Context/MyContext'
 
 export function CategoryChange({
   active,
   setActive,
   priceAdd,
-  categories,
 }: DataPropsAndActiveWindow) {
-  const { user, setUser } = useContext(UserContext)
+  const { user, setUser } = useUserContext()
   const [costAdd, setCostAdd] = useState<number>(0)
-  const { costAndCategory } = useContext(CostAndCategory)
   const [error, setError] = useState<string>('ошбика')
+  const [description, setDiscription] = useState<string>('')
+  const [dataSent, setDataSent] = useState<dataExpenses>({
+    category: '',
+    value: 0,
+    date: new Date().toJSON(),
+    description: '',
+    operation_type: 'expenses',
+  })
+  const [dataExpense, setDataExpese] = useState()
+  const [click, setClick] = useState<boolean>(false)
 
-  
-  console.log(costAndCategory)
-  
-  function handleInputChange(e) {
-    setCostAdd(e.target.value)
+
+  function handleInputChangeCost(e: ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value
+    const numValue = value === '' ? 0 : Number(value)
+    setCostAdd(numValue)
   }
+  function handleInputChangeDiscription(e: ChangeEvent<HTMLInputElement>) {
+    setDiscription(e.target.value)
+  }
+
+  const categories: Categories[] = [
+    { name: 'Продукты', value: 'food' },
+    { name: 'Транспорт', value: 'transport' },
+    { name: 'Коммунальные услуги', value: 'utilities' },
+    { name: 'Развлечения', value: 'entertainment' },
+    { name: 'Одежда', value: 'clothing' },
+    { name: 'Прочее', value: 'other' },
+    { name: 'Подарки', value: 'gifts' },
+  ]
+
   // передаем данные на сервер
-  const handleSendData = async () => {
-    console.log('тут работает')
+  useEffect(()=>{
+
+    const handleSendData = async () => {
+      const dataDate: getExpensesDate = {
+        year: new Date().getFullYear(),
+        month: new Date().getMonth() + 1,
+        operation_type: 'expenses',
+      }
+      if (user.userId) {
+        try {
+          const result = await GetMonthyTransaction(dataDate)
+          console.log('Success:', result)
+          setDataExpese(result)
+        } catch {
+          console.error('Error:', error)
+        }
+      }
+    }
+    if(click){
+      handleSendData()
+      setClick(false)
+    }
+  },[click, user.userId])
+
+
+  // передачи данных на сервер о тратах в категориях
+  const sentDataExpensis = async (dataSent: dataExpenses) => {
     try {
-      const result = await sendCostAndCatgory()
-      console.log('Success:', result)
+      await SentDateCategory(dataSent)
     } catch {
-      console.error('Error:', error)
+      console.error('не работает функция sentDataExpensis', error)
     }
   }
-  //  получаем в колбек данные о нажатии на кнопку
-  const categoryClick = (category: string) => () => {
-    if (typeof costAdd === 'string') {
-      const numberCostAdd = Number(costAdd)
-      priceAdd(numberCostAdd, category)
-    }
-    handleSendData()
+  console.log(dataExpense)
+  console.log(dataExpense.monthlyTransactions)
+// создание объекта для передачи данных
+  function dataForSent(valueCategory: string, costAdd: number) {
+    setDataSent({
+      value: costAdd,
+      category: valueCategory,
+      date: new Date().toJSON(),
+      description: description,
+      operation_type: 'expenses',
+    })
+    sentDataExpensis(dataSent)
+    console.log(dataSent)
+  }
+  //  получаем в колбек данные о нажатии на кнопку для передачи в разметку
+  const categoryClick = (categoryName: string, valueCategory: string) => () => {
+    priceAdd(costAdd, categoryName)
+    dataForSent(valueCategory, costAdd)
+    console.log(valueCategory)
+    console.log(categoryName)
   }
 
 
@@ -69,21 +131,27 @@ export function CategoryChange({
               className={styles.inputPrice}
               type='number'
               value={costAdd}
-              onChange={handleInputChange}
+              onChange={handleInputChangeCost}
             />
-
+            <label>Введите описание</label>
+            <input
+              className={styles.inputDiscription}
+              type='string'
+              value={description}
+              onChange={handleInputChangeDiscription}
+            />
             <div className='category'>
-              {categories.map((category: string) => (
+              {categories.map((category) => (
                 <button
                   className={styles.buttonSub}
-                  key={category}
-                  onClick={categoryClick(category)}
+                  key={category.value}
+                  onClick={categoryClick(category.name, category.value)}
                 >
-                  {category}
+                  {category.name}
                 </button>
               ))}
-              <button className={styles.buttonSub} onClick={handleSendData}>
-                {'Добавить категорию'}
+              <button className={styles.buttonSub} onClick={() => setClick(true)}>
+                {'Записать'}
               </button>
             </div>
           </form>

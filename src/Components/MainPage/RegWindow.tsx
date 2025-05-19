@@ -1,9 +1,10 @@
 import './modal.css'
 import styles from './MainPage.module.css'
-import Cookies from 'js-cookie'
+
 import { useState } from 'react'
 import { ActiveWindow, Users } from '../../types/types'
 import { ChangeEvent } from 'react'
+import { Registration } from '../../api/Registration'
 
 type FormData = Pick<Users, 'email' | 'password' | 'name'>
 
@@ -15,7 +16,6 @@ export function RegWindow({ active, setActive }: ActiveWindow) {
     name: '',
   })
   const [message, setMessage] = useState('')
-  const [token, setToken] = useState<null>(null) // Для хранения токена
   const [error, setError] = useState<null>(null)
   const [registrationResponse, setRegistrationResponse] = useState<null>(null)
 
@@ -24,90 +24,22 @@ export function RegWindow({ active, setActive }: ActiveWindow) {
     console.log(formData)
   }
 
-  // отправка пользователя на бэк сервер
-
-  const registration = async () => {
+  const regData = async () => {
+    console.log('regData тут работает')
+    console.log(formData)
     try {
-      const response = await fetch(
-        'http://185.255.133.251:8051/api/users/register',
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-          }),
-        }
+      const resultReg = await Registration(
+        formData.email,
+        formData.name,
+        formData.password
       )
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(
-          errorData.message || `HTTP ошибка! status: ${response.status}`
-        )
-      }
-      const data = await response.json()
-
-      if (data.token) {
-        Cookies.set('auth_token', data.token, {
-          secure: true,
-          sameSite: 'Strict',
-          expires: 1,
-        })
-      }
-
-      console.log('Результат регистрации:', data) // Вывод JSON в консоль после регистрации
-      setMessage('Успешная регистрация!')
-      setRegistrationResponse(data) // Сохраняем ответ для возможного отображения
-      await login()
-    } catch (error: unknown) {
-      setMessage(`Ошибка регистрации: ${error.message}`)
-      setError(error) // Сохраняем ошибку для отображения
-    }
-  }
-
-  const login = async () => {
-    try {
-      const response = await fetch(
-        'http://185.255.133.251:8051/api/users/login',
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
-        }
-      )
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'ошибка авторизации')
-      }
-      const data = await response.json()
-      console.log('Результат авторизации:', data.userName)
-
-      if (data.token) {
-        Cookies.set('auth_token', data.token, {
-          secure: true,
-          sameSite: 'Strict',
-          expires: 1,
-        })
-      }
-
-      setToken(data.token)
-      setMessage('Успешная авторизация!')
-      console.log(data)
+      console.log('Success:', resultReg)
     } catch (error) {
-      setMessage(`Ошибка авторизации: ${error.message}`)
-      setError(error) // Сохраняем ошибку для отображения
+      console.error('Error:', error)
+      setError(error)
     }
   }
+  
 
   return (
     <>
@@ -121,8 +53,6 @@ export function RegWindow({ active, setActive }: ActiveWindow) {
         >
           {message && <p>{message}</p>}
           {error && <p style={{ color: 'red' }}>{error.message}</p>}{' '}
-          {/* Отображение ошибки */}
-          {/* {token && <p>Вы авторизованы! Токен: {token.userName}</p>} */}
           {registrationResponse && (
             <pre>
               <code>{JSON.stringify(registrationResponse.userName)}</code>
@@ -132,7 +62,7 @@ export function RegWindow({ active, setActive }: ActiveWindow) {
             className={'RegModalFlex'}
             onSubmit={(e) => {
               e.preventDefault()
-              registration()
+              regData()
             }}
           >
             <label> Введите Имя </label>

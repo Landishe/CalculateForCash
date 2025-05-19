@@ -4,8 +4,7 @@ import './historyModal.css'
 import styles from './HystoryPayment.module.css'
 import { DataProps } from '../../types/types'
 
-
-export function CategoryWindow({priceAdd, categories}: DataProps) {
+export function CategoryWindow({ priceAdd }: DataProps) {
   const [modalActive, setModalActive] = useState(false)
 
   return (
@@ -13,7 +12,11 @@ export function CategoryWindow({priceAdd, categories}: DataProps) {
       <button className={styles.btnAdd} onClick={() => setModalActive(true)}>
         {'+'}
       </button>
-      <CategoryChange active={modalActive} setActive={setModalActive} priceAdd={priceAdd} categories={categories}/>
+      <CategoryChange
+        active={modalActive}
+        setActive={setModalActive}
+        priceAdd={priceAdd}
+      />
     </div>
   )
 }

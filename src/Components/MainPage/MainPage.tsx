@@ -4,17 +4,21 @@ import { HistoryPaymant } from '../HistoryPayment/HystoryPayment.tsx'
 import { Cash } from '../Cash/Cash.tsx'
 import { Grafic } from '../Grafics/Grafics.tsx'
 import { AuthWindow } from './AuthorizationWindow'
-import { UserContext } from '../../Context/MyContext.tsx'
-import { useState } from 'react'
+import { useUserContext  } from '../../Context/MyContext.tsx'
+
 
 export function MainPage() {
-  const [user, setUser] = useState({userName:'', id:''})
-
+  const { user, setUser } = useUserContext()
+console.log(user)
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <>
       <div>
         <div className={styles.forReg}>
-          <p>{`Добро пожаловать: ${user.userName}`}</p>
+          <p>
+            {user.userName
+              ? `Добро пожаловать: ${user.userName}`
+              : 'Добро пожаловать: Гость'}
+          </p>
           <AuthWindow />
         </div>
       </div>
@@ -33,6 +37,6 @@ export function MainPage() {
           <Grafic />
         </div>
       </div>
-    </UserContext.Provider>
+    </>
   )
 }

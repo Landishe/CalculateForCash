@@ -1,6 +1,9 @@
-import { DatacostAndCategoryForUser } from '../types/types'
 
-export async function sendCostAndCatgory(data: DatacostAndCategoryForUser) {
+import Cookies from 'js-cookie'
+
+export async function GetExpenses() {
+  const token = Cookies.get('auth_token')
+  
   try {
     const response = await fetch(
       `http://185.255.133.251:8051/api/balance/getBalance`,
@@ -9,6 +12,7 @@ export async function sendCostAndCatgory(data: DatacostAndCategoryForUser) {
         credentials: 'include',
         headers: {
           'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
       }
     )
@@ -17,6 +21,7 @@ export async function sendCostAndCatgory(data: DatacostAndCategoryForUser) {
       throw new Error('Данные не отправились')
     }
     const result = await response.json()
+    console.log(result)
     return result
   } catch (error) {
     console.error('Error:', error)

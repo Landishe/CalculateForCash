@@ -1,85 +1,33 @@
 import './modal.css'
 import styles from './MainPage.module.css'
-import Cookies from 'js-cookie'
 import { RegButton } from './RegButton.js'
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { FormData } from '../../types/types'
-import { UserContext } from '../../Context/MyContext.js'
+import { useUserContext  } from '../../Context/MyContext.js'
 import { ActiveWindow } from '../../types/types'
 import { ChangeEvent } from 'react'
-import axios from 'axios'
+import { Login } from '../../api/Login'
 
 export function ModalWindow({ active, setActive }: ActiveWindow) {
-  const { user, setUser } = useContext(UserContext)
+  const { setUser } = useUserContext()
+  const [userName, setUserName] = useState<string>('')
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
   })
-  const [message, setMessage] = useState<string>('')
-  const [error, setError] = useState<null>(null)
-  //
-  const [registrationResponse, setRegistrationResponse] = useState(null)
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>, name: string) {
     setFormData({ ...formData, [name]: e.target.value })
   }
 
-  const login = async () => {
+  const handleSendData = async () => {
     try {
-      const response = await fetch(
-        'http://185.255.133.251:8051/api/users/login',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password,
-          }),
-        }
-      )
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'ошибка авторизации')
-      }
-    
-      // await axios
-      //   .post(
-      //     'http://185.255.133.251:8051/api/users/login',
-      //     {
-      //       email: formData.email,
-      //       password: formData.password,
-      //     },
-      //     {
-      //       withCredentials: true,
-      //     }
-      //   )
-      //   .then((res) => {
-      //     console.log(res)
-      //   })
-
-      console.log(response)
-      console.log(response?.cookies)
-      console.log(response?.token)
-      const data = await response.json()
-
-      console.log('Результат авторизации:', data)
-
-      if (data.token) {
-        console.log('Токен сохранен в куки:', Cookies.get('auth_token'))
-        Cookies.set('auth_token', data.token, {
-          secure: false,
-          sameSite: 'Lax',
-          expires: 1,
-        })
-      }
-      setUser(data)
-      setMessage('Успешная авторизация!')
+      const result = await Login(formData.email, formData.password)
+      console.log('Success:', result)
+      setUser({ userName: result.userName, userId: result.userId})
+      setUserName(result.userName)
     } catch (error) {
-      setMessage(`Ошибка авторизации: ${error.message}`)
-      setError(error) // Сохраняем ошибку для отображения
+      console.error('Error:', error)
     }
   }
 
@@ -93,16 +41,16 @@ export function ModalWindow({ active, setActive }: ActiveWindow) {
           className={active ? 'modalWindow active' : 'modalWindow'}
           onClick={(e) => e.stopPropagation()}
         >
-          {registrationResponse && (
-            <pre>
-              <code>{JSON.stringify(registrationResponse.userName)}</code>
-            </pre>
+          {userName && (
+            <p style={{ backgroundColor: 'rgb(155, 248, 194)' }}>
+              {`Добро пожаловать: ${userName}`}
+            </p>
           )}
           <form
             className={'RegModalFlex'}
             onSubmit={(e) => {
               e.preventDefault()
-              login()
+              handleSendData()
             }}
           >
             <label> Введите Логин </label>

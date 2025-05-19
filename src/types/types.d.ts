@@ -12,32 +12,47 @@ interface ActiveWindow {
 }
 
 interface DataProps {
-  priceAdd: (cost: number, category: string) => void
-  categories: string[]
+  priceAdd: (cost: number, name: string) => void
 }
 
 interface DataPropsAndActiveWindow extends ActiveWindow, DataProps {}
 
 type FormData = Pick<Users, 'email' | 'password'>
 
-interface Context {
-  user: string
-  setUser: (user: string) => void
-}
-export interface DatacostAndCategoryForUser{
-  userId: string
-  userName:string
-  expenses: {
-    id: number,
-    category: string,
-    cost: number
-  }
+interface UserName {
+  userName: string
+ 
 }
 
-type Categories = string[]
+interface UsersContext {
+  user: UserName
+  setUser: Dispatch<SetStateAction<UserName>>;
+}
+export interface dataExpenses {
+  category: string
+  value: number
+  date: string
+  description: string
+  operation_type: string
+}
+
+interface Categories {
+  value: string
+  name: string
+}
 
 export interface costAndCategory {
   id: number
-  category: string
   cost: number
+  name: string
+}
+interface getExpensesDate {
+  year: number
+  month: number
+  operation_type: string
+}
+interface Balance{
+   balance_income: number;
+  balance_expenses: number;
+  balance_current: number;
 }
